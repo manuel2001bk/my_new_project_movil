@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_new_project/pages/splash/splash_view.dart';
 import 'pages/on_boarding.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: OnBoarding(),
+      home: SplashView(),
     );
   }
 }
