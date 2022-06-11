@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_new_project/pages/splash/splash_view.dart';
-import 'pages/on_boarding.dart';
 
 void main() {
   runApp(const MyApp());

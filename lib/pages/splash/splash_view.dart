@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
+import 'package:flutter/services.dart';
+
 class SplashView extends StatefulWidget {
-  SplashView({Key? key}) : super(key: key);
+  const SplashView({Key? key}) : super(key: key);
 
   @override
   State<SplashView> createState() => _SplashViewState();
@@ -14,7 +16,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    // _loadImage('assets/images/splash.png');
+    _loadImage('assets/images/splash.png');
     // _toOnBoarding();
   }
 
@@ -31,6 +33,13 @@ class _SplashViewState extends State<SplashView> {
       ),
     );
   }
+
+  void _loadImage(String path) async {
+    final data = await rootBundle.load(path);
+    final bytes = data.buffer.asUint8List();
+    final image = await decodeImageFromList(bytes);
+    setState(() => this.image = image);
+  }
 }
 
 class _SplashCanvas extends CustomPainter {
@@ -45,21 +54,41 @@ class _SplashCanvas extends CustomPainter {
     paint.strokeWidth = 5;
     final path = Path();
     path.lineTo(0, size.height * 0.10);
-    var val = 1.0;
-    path.relativeQuadraticBezierTo(70, val * 90, 150, 0);
-    path.relativeQuadraticBezierTo(80, -val * 10, 100, 0);
-    path.relativeQuadraticBezierTo(size.width * 0.15, 25, 110, 0);
-    path.relativeQuadraticBezierTo(size.width * 0.50, -70, 0, 0);
-    path.relativeQuadraticBezierTo(size.width * 0.26, -60, 300, -100);
-    path.relativeQuadraticBezierTo(0, 70, size.width, 0);
 
+    path.quadraticBezierTo(size.width * 0.15, size.height * 0.20,
+        size.width * 0.35, size.height * 0.13);
+
+    path.quadraticBezierTo(size.width * 0.50, size.height * 0.07,
+        size.width * 0.7, size.height * 0.1);
     path.quadraticBezierTo(
-        size.width * 0.50, size.height * 0.28, size.width, size.height);
+        size.width * 0.8, size.height * 0.13, size.width, size.height * 0.12);
+
     path.lineTo(size.width, 0);
 
+    path.moveTo(0, size.height);
+
+    path.quadraticBezierTo(
+        size.width * 0.70, size.height * 0.75, size.width, size.height);
+
     canvas.drawPath(path, paint);
-    canvas.scale(0.24, 0.24);
-    // canvas.drawImage(imageCanvas, const Offset(190*2.5, 430*3.5), paint)
+    canvas.scale(0.25, 0.25);
+    canvas.drawImage(
+        imageCanvas!, Offset(size.width * 1.2, size.width * 2.2), paint);
+
+    final textStyle = ui.TextStyle(
+      color: Colors.black,
+      fontSize: 100,
+    );
+    final paragraphStyle = ui.ParagraphStyle(
+      textDirection: TextDirection.ltr,
+    );
+    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(textStyle)
+      ..addText('Tienda de mascotas');
+    const constraints = ui.ParagraphConstraints(width: 1000);
+    final paragraph = paragraphBuilder.build();
+    paragraph.layout(constraints);
+    canvas.drawParagraph(paragraph, Offset(size.width * 1, size.height * 2.7));
   }
 
   @override
