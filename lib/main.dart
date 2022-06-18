@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_new_project/pages/login/loginView.dart';
+import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
+import 'package:my_new_project/pages/recuperar_password/recuperarPassword.dart';
+import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
+import 'package:my_new_project/pages/register/registerView.dart';
 import 'package:my_new_project/pages/splash/splash_view.dart';
 
 void main() {
@@ -16,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashView(),
+      home: recuperarPasswordView(),
     );
   }
 }

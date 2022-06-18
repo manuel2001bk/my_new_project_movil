@@ -105,6 +105,7 @@ class _OnBoardingState extends State<OnBoarding> {
         backgroundColor:
             pages == onBoardingDatas.length - 1 ? Colors.green : Colors.white,
         padding: const EdgeInsets.all(0));
+    
     return Padding(
       padding: const EdgeInsets.only(top: 100.0),
       child: TextButton(
