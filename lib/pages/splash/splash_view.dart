@@ -73,7 +73,7 @@ class _SplashCanvas extends CustomPainter {
     canvas.drawPath(path, paint);
     canvas.scale(0.25, 0.25);
     canvas.drawImage(
-        imageCanvas!, Offset(size.width * 1.2, size.width * 2.2), paint);
+        imageCanvas!, Offset(size.width * 1.1, size.width * 2.2), paint);
 
     final textStyle = ui.TextStyle(
       color: Colors.black,
@@ -88,7 +88,7 @@ class _SplashCanvas extends CustomPainter {
     const constraints = ui.ParagraphConstraints(width: 1000);
     final paragraph = paragraphBuilder.build();
     paragraph.layout(constraints);
-    canvas.drawParagraph(paragraph, Offset(size.width * 1, size.height * 2.7));
+    canvas.drawParagraph(paragraph, Offset(size.width * .8, size.height * 2.5));
   }
 
   @override
