@@ -1,11 +1,16 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
+import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
 
+// ignore: camel_case_types
 class recuperarPasswordView extends StatelessWidget {
   const recuperarPasswordView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Container(
@@ -17,16 +22,25 @@ class recuperarPasswordView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Icon(
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const recuperarPasswordCorreoView()));
+                      },
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Color.fromARGB(255, 231, 56, 99),
                         size: 30,
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 10),
                       child: Text("Recuperar Contraseña",
                           style: TextStyle(fontSize: 20, color: Colors.white)),
                     ),

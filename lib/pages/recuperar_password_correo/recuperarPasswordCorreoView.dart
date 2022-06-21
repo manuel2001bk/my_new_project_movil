@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
+import 'package:my_new_project/pages/recuperar_password/recuperarPassword.dart';
 
 class recuperarPasswordCorreoView extends StatelessWidget {
   const recuperarPasswordCorreoView({Key? key}) : super(key: key);
@@ -6,6 +8,7 @@ class recuperarPasswordCorreoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Container(
@@ -17,16 +20,24 @@ class recuperarPasswordCorreoView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Icon(
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginMenuView()));
+                      },
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Color.fromARGB(255, 231, 56, 99),
                         size: 30,
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 10),
                       child: Text("Recuperar Contraseña",
                           style: TextStyle(fontSize: 20, color: Colors.white)),
                     ),
@@ -107,7 +118,13 @@ class recuperarPasswordCorreoView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(80.0),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const recuperarPasswordView()));
+                  },
                   child: const Text('Enviar solicitud',
                       style: TextStyle(
                           fontSize: 18,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
+import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
+import 'package:my_new_project/pages/register/registerView.dart';
 
 class loginView extends StatelessWidget {
   const loginView({Key? key}) : super(key: key);
@@ -6,6 +9,7 @@ class loginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Container(
@@ -17,16 +21,24 @@ class loginView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Icon(
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginMenuView()));
+                      },
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Color.fromARGB(255, 231, 56, 99),
                         size: 30,
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 10),
                       child: Text("Iniciar Sesión",
                           style: TextStyle(fontSize: 20, color: Colors.white)),
                     ),
@@ -79,9 +91,9 @@ class loginView extends StatelessWidget {
                       fontSize: 15,
                       color: Color.fromARGB(255, 143, 143, 143),
                     ),
-                    prefixIcon: const Icon(
-                      Icons.email,
-                    ),
+                    // prefixIcon: const Icon(
+                    //   Icons.email,
+                    // ),
                   ),
                 ),
               ],
@@ -113,7 +125,7 @@ class loginView extends StatelessWidget {
                       fontSize: 15,
                       color: Color.fromARGB(255, 143, 143, 143),
                     ),
-                    prefixIcon: const Icon(
+                    suffixIcon: const Icon(
                       Icons.remove_red_eye,
                     ),
                   ),
@@ -122,15 +134,28 @@ class loginView extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20, right: 40),
+            padding: const EdgeInsets.only(right: 40),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: const [
-                Text('¿Has olvidado tu contraseña?',
-                    style: TextStyle(
-                        fontSize: 17,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const recuperarPasswordCorreoView()));
+                  },
+                  child: const Text('¿Has olvidado tu contraseña?',
+                      style: TextStyle(
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 231, 56, 99))),
+                        color: Color.fromARGB(255, 231, 56, 99),
+                      )),
+                ),
               ],
             ),
           ),
@@ -153,16 +178,28 @@ class loginView extends StatelessWidget {
                         color: Colors.white)),
               )),
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 65, bottom: 20),
+            padding: const EdgeInsets.only(top: 10, left: 65),
             child: Row(
-              children: const [
-                Text('¿Todavia no tienes una cuenta?',
+              children: [
+                const Text('¿Todavia no tienes una cuenta?',
                     style: TextStyle(fontSize: 15, color: Colors.black)),
-                Text(' Regístrate',
-                    style: TextStyle(
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const registerView()));
+                  },
+                  child: const Text('Regístrate',
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 231, 56, 99))),
+                        color: Color.fromARGB(255, 231, 56, 99),
+                      )),
+                ),
               ],
             ),
           ),

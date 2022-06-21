@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_new_project/pages/login/loginView.dart';
+import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
 
 class registerView extends StatelessWidget {
   const registerView({Key? key}) : super(key: key);
@@ -6,6 +8,7 @@ class registerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Container(
@@ -17,16 +20,24 @@ class registerView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Icon(
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginMenuView()));
+                      },
+                      child: const Icon(
                         Icons.arrow_back,
                         color: Color.fromARGB(255, 231, 56, 99),
                         size: 30,
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.only(left: 40),
+                      padding: EdgeInsets.only(left: 10),
                       child: Text("Registrate",
                           style: TextStyle(fontSize: 22, color: Colors.white)),
                     ),
@@ -147,7 +158,7 @@ class registerView extends StatelessWidget {
                       fontSize: 15,
                       color: Color.fromARGB(255, 143, 143, 143),
                     ),
-                    prefixIcon: const Icon(
+                    suffixIcon: const Icon(
                       Icons.remove_red_eye,
                     ),
                   ),
@@ -205,16 +216,28 @@ class registerView extends StatelessWidget {
                         color: Colors.white)),
               )),
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 65, bottom: 20),
+            padding: const EdgeInsets.only(top: 10, left: 65),
             child: Row(
-              children: const [
-                Text('¿Ya tienes una cuenta?',
+              children: [
+                const Text('¿Ya tienes una cuenta?',
                     style: TextStyle(fontSize: 15, color: Colors.black)),
-                Text(' Inicia sesión',
-                    style: TextStyle(
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const loginView()));
+                  },
+                  child: const Text('Iniciar sesion',
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 231, 56, 99))),
+                        color: Color.fromARGB(255, 231, 56, 99),
+                      )),
+                ),
               ],
             ),
           ),

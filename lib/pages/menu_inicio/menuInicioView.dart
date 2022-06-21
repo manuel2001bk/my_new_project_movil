@@ -1,9 +1,11 @@
 // ignore_for_file: unnecessary_const
 
 import 'package:flutter/material.dart';
+import 'package:my_new_project/pages/login/loginView.dart';
+import 'package:my_new_project/pages/register/registerView.dart';
 
-class LoginMenu extends StatelessWidget {
-  const LoginMenu({Key? key}) : super(key: key);
+class LoginMenuView extends StatelessWidget {
+  const LoginMenuView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,12 @@ class LoginMenu extends StatelessWidget {
                       borderRadius: BorderRadius.circular(80.0),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const registerView()));
+                  },
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -144,23 +151,36 @@ class LoginMenu extends StatelessWidget {
                 )),
             const Spacer(),
             Column(
-              children: const [
-                Text("Entrar como invitado",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Color.fromARGB(255, 231, 56, 99),
-                    )),
-                Text("Entrar como Vendedor",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Color.fromARGB(255, 128, 166, 96),
-                    )),
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onPressed: () {},
+                  child: const Text('Entrar como invitado',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 231, 56, 99))),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onPressed: () {},
+                  child: const Text('Entrar como Vendedor',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 128, 166, 96),
+                      )),
+                ),
               ],
             ),
             const Spacer(),
             Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.only(bottom: 20.0, top: 20.0),
+              padding: const EdgeInsets.only(top: 20.0),
               child: Row(
                 children: [
                   const Spacer(),
@@ -169,12 +189,22 @@ class LoginMenu extends StatelessWidget {
                     child: const Text('¿Ya tienes una cuenta? ',
                         style: TextStyle(fontSize: 14, color: Colors.black)),
                   ),
-                  Container(
-                    alignment: Alignment.center,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const loginView()));
+                    },
                     child: const Text('Iniciar sesion',
                         style: TextStyle(
-                            fontSize: 14,
-                            color: Color.fromARGB(255, 231, 56, 99))),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 231, 56, 99),
+                        )),
                   ),
                   const Spacer()
                 ],
