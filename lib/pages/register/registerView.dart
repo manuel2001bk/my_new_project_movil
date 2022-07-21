@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:my_new_project/pages/login/loginView.dart';
 import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
+import 'package:my_new_project/models/user.dart';
+import 'package:my_new_project/repository/repository_api.dart';
+import 'package:my_new_project/repository/repository_controller.dart';
 
 class registerView extends StatelessWidget {
   const registerView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _textControllerId = TextEditingController(text: "1");
+    TextEditingController _textControllerEmail = TextEditingController(text: "");
+    TextEditingController _textControllerNombre =TextEditingController(text: "");
+    TextEditingController _textControllerPhoneNumber = TextEditingController(text: "9616258130");
+    TextEditingController _textControllerPassword = TextEditingController(text: "");
+    TextEditingController _textControllerIdRole = TextEditingController(text: "1");
+    TextEditingController _textControllerIdPlatform = TextEditingController(text: "1");
+    TextEditingController _textControllerIdChannel = TextEditingController(text: "1");
+    TextEditingController _textControllerGuess = TextEditingController(text: "");
+    TextEditingController _textControllerLastName = TextEditingController(text: "");
+    var userController = ObjectController(ListObjectApi());
+
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       body: LayoutBuilder(
@@ -89,6 +104,7 @@ class registerView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
+                            controller: _textControllerNombre,
                             obscureText: true,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -120,6 +136,7 @@ class registerView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
+                            controller: _textControllerEmail,
                             obscureText: true,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -151,6 +168,7 @@ class registerView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
+                            controller: _textControllerPassword,
                             obscureText: true,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -231,7 +249,21 @@ class registerView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(80.0),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            User user = User(
+                              int.parse(_textControllerId.text),
+                              _textControllerEmail.text,
+                              _textControllerNombre.text,
+                              _textControllerPhoneNumber.text,
+                              _textControllerPassword.text,
+                              int.parse(_textControllerIdRole.text),
+                              int.parse(_textControllerIdPlatform.text),
+                              int.parse(_textControllerIdChannel.text),
+                              _textControllerGuess.text,
+                              _textControllerLastName.text
+                            );
+                            userController.methodsUser(user);
+                          },
                           child: const Text('Crear cuenta',
                               style: TextStyle(
                                   fontSize: 18,

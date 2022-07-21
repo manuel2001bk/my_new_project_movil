@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:my_new_project/models/recover_pass.dart';
 import 'package:my_new_project/pages/login/loginView.dart';
 import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
 import 'package:my_new_project/pages/recuperar_password/recuperarPassword.dart';
-
+import 'package:my_new_project/repository/repository_api.dart';
+import 'package:my_new_project/repository/repository_controller.dart';
 class recuperarPasswordCorreoView extends StatelessWidget {
   const recuperarPasswordCorreoView({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    TextEditingController _textControllerIdChannel = TextEditingController(text: "1");
+    TextEditingController _textControllerEmail = TextEditingController(text: "");
+    var recoverController = ObjectController(ListObjectApi());
     return Scaffold(body: LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return SingleChildScrollView(
@@ -90,6 +94,7 @@ class recuperarPasswordCorreoView extends StatelessWidget {
                         ),
                         const Padding(padding: EdgeInsets.only(top: 8)),
                         TextField(
+                          controller: _textControllerEmail,
                           obscureText: true,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -126,6 +131,13 @@ class recuperarPasswordCorreoView extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
+
+                            RecoverPassword recoverPassword = RecoverPassword(
+                              int.parse(_textControllerIdChannel.text),
+                              _textControllerEmail.text
+                            );
+                            recoverController.methodRecover(recoverPassword);
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

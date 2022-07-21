@@ -1,13 +1,19 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:my_new_project/models/update_password.dart';
 import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
-
+import 'package:my_new_project/repository/repository_api.dart';
+import 'package:my_new_project/repository/repository_controller.dart';
 // ignore: camel_case_types
 class recuperarPasswordView extends StatelessWidget {
   const recuperarPasswordView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _textControllerIdUser = TextEditingController(text: "1");
+    TextEditingController _textControllerNewPassword = TextEditingController(text: "");
+    var updateController = ObjectController(ListObjectApi());
+
     return Scaffold(body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return SingleChildScrollView(
@@ -90,6 +96,7 @@ class recuperarPasswordView extends StatelessWidget {
                       ),
                       const Padding(padding: EdgeInsets.only(top: 8)),
                       TextField(
+                        controller: _textControllerNewPassword,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -149,7 +156,13 @@ class recuperarPasswordView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(80.0),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          UpdatePassword updatePassword = UpdatePassword(
+                            int.parse(_textControllerIdUser.text),
+                            _textControllerNewPassword.text
+                          );
+                          updateController.methodUpdate(updatePassword);
+                        },
                         child: const Text('Actualizar Contraseña',
                             style: TextStyle(
                                 fontSize: 18,

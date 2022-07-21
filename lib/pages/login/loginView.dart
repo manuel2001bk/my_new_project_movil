@@ -2,12 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
 import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
 import 'package:my_new_project/pages/register/registerView.dart';
+import 'package:my_new_project/models/login.dart';
+import 'package:my_new_project/repository/repository_api.dart';
+import 'package:my_new_project/repository/repository_controller.dart';
 
 class loginView extends StatelessWidget {
   const loginView({Key? key}) : super(key: key);
 
   @override
+
   Widget build(BuildContext context) {
+    TextEditingController _textControllerIdChannel = TextEditingController(text: "1");
+    TextEditingController _textControllerEmail = TextEditingController(text: "");
+    TextEditingController _textControllerPassword = TextEditingController(text: "");
+    TextEditingController _textControllerIdPlatform = TextEditingController(text: "1");
+    TextEditingController _textControllerIdRole = TextEditingController(text: "1");
+    TextEditingController _textControllerIdDevice = TextEditingController(text: "1");
+    var loginController = ObjectController(ListObjectApi());
+    
     return Scaffold(
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -91,6 +103,7 @@ class loginView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
+                            controller: _textControllerEmail,
                             obscureText: true,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -125,6 +138,7 @@ class loginView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
+                            controller: _textControllerPassword,
                             obscureText: true,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -180,7 +194,17 @@ class loginView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(80.0),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Login login = Login(
+                              int.parse(_textControllerIdChannel.text),
+                              _textControllerEmail.text,
+                              _textControllerPassword.text,
+                              int.parse(_textControllerIdPlatform.text),
+                              int.parse(_textControllerIdRole.text),
+                              _textControllerIdDevice.text
+                            );
+                            loginController.listmethods(login);
+                          },
                           child: const Text('Ingresar',
                               style: TextStyle(
                                   fontSize: 18,
