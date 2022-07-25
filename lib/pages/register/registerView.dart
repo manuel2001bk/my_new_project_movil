@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:my_new_project/pages/login/loginView.dart';
 import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
-import 'package:my_new_project/models/user.dart';
-import 'package:my_new_project/repository/repository_api.dart';
-import 'package:my_new_project/repository/repository_controller.dart';
 
-class registerView extends StatelessWidget {
-  const registerView({Key? key}) : super(key: key);
+import '../../services/servicios.dart' as servicios;
+
+class registerview extends StatefulWidget {
+  const registerview({Key? key}) : super(key: key);
+
+  @override
+  State<registerview> createState() => _registerviewState();
+}
+
+class _registerviewState extends State<registerview> {
+  var name = TextEditingController();
+  var email = TextEditingController();
+  var password = TextEditingController();
+  var checkbox = false;
+  late bool _passwordVisible;
+
+  @override
+  void initState() {
+    _passwordVisible = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _textControllerId = TextEditingController(text: "1");
-    TextEditingController _textControllerEmail = TextEditingController(text: "");
-    TextEditingController _textControllerNombre =TextEditingController(text: "");
-    TextEditingController _textControllerPhoneNumber = TextEditingController(text: "9616258130");
-    TextEditingController _textControllerPassword = TextEditingController(text: "");
-    TextEditingController _textControllerIdRole = TextEditingController(text: "1");
-    TextEditingController _textControllerIdPlatform = TextEditingController(text: "1");
-    TextEditingController _textControllerIdChannel = TextEditingController(text: "1");
-    TextEditingController _textControllerGuess = TextEditingController(text: "");
-    TextEditingController _textControllerLastName = TextEditingController(text: "");
-    var userController = ObjectController(ListObjectApi());
-
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewP) {
           return SingleChildScrollView(
@@ -104,8 +107,7 @@ class registerView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
-                            controller: _textControllerNombre,
-                            obscureText: true,
+                            controller: name,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -136,8 +138,7 @@ class registerView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
-                            controller: _textControllerEmail,
-                            obscureText: true,
+                            controller: email,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -168,8 +169,8 @@ class registerView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
-                            controller: _textControllerPassword,
-                            obscureText: true,
+                            controller: password,
+                            obscureText: _passwordVisible,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -179,8 +180,18 @@ class registerView extends StatelessWidget {
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 143, 143, 143),
                               ),
-                              suffixIcon: const Icon(
-                                Icons.remove_red_eye,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.remove_red_eye,
+                                  color: _passwordVisible
+                                      ? Colors.blue
+                                      : Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
                               ),
                             ),
                           )
@@ -207,8 +218,12 @@ class registerView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Checkbox(
-                            value: false,
-                            onChanged: (value) {},
+                            value: checkbox,
+                            onChanged: (value) {
+                              setState(() {
+                                checkbox = value!;
+                              });
+                            },
                             shape: const StadiumBorder(),
                             activeColor: const Color.fromARGB(255, 72, 25, 124),
                           ),
@@ -249,20 +264,77 @@ class registerView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(80.0),
                             ),
                           ),
-                          onPressed: () {
-                            User user = User(
-                              int.parse(_textControllerId.text),
-                              _textControllerEmail.text,
-                              _textControllerNombre.text,
-                              _textControllerPhoneNumber.text,
-                              _textControllerPassword.text,
-                              int.parse(_textControllerIdRole.text),
-                              int.parse(_textControllerIdPlatform.text),
-                              int.parse(_textControllerIdChannel.text),
-                              _textControllerGuess.text,
-                              _textControllerLastName.text
-                            );
-                            userController.methodsUser(user);
+                          onPressed: () async {
+                            if (checkbox &&
+                                name.text.isNotEmpty &&
+                                email.text.isNotEmpty &&
+                                password.text.isNotEmpty) {
+                              var response = await servicios.singUp(
+                                  name.text, email.text, password.text);
+                              print(response);
+                              if (response["code"] == true) {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Registro correcto",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    content: const Text(
+                                        "Verifique su correo para activar su cuenta"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const loginview())),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Error al registrarse",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    content: Text(response["message"]),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            } else {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text("Error al registrarse",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  content: const Text(
+                                      'Verifique que haya completado todos los campos'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           },
                           child: const Text('Crear cuenta',
                               style: TextStyle(
@@ -285,7 +357,7 @@ class registerView extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const loginView()));
+                                      builder: (context) => const loginview()));
                             },
                             child: const Text('Iniciar sesion',
                                 style: TextStyle(

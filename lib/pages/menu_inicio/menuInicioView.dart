@@ -118,7 +118,7 @@ class LoginMenuView extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const registerView()));
+                            builder: (context) => const registerview()));
                   },
                   child: Stack(
                     alignment: Alignment.center,
@@ -197,7 +197,7 @@ class LoginMenuView extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const loginView()));
+                              builder: (context) => const loginview()));
                     },
                     child: const Text('Iniciar sesion',
                         style: TextStyle(

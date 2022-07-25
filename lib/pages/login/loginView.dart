@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
+import 'package:my_new_project/pages/on_boarding.dart';
 import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
 import 'package:my_new_project/pages/register/registerView.dart';
-import 'package:my_new_project/models/login.dart';
-import 'package:my_new_project/repository/repository_api.dart';
-import 'package:my_new_project/repository/repository_controller.dart';
 
-class loginView extends StatelessWidget {
-  const loginView({Key? key}) : super(key: key);
+import '../../services/servicios.dart' as servicios;
+
+class loginview extends StatefulWidget {
+  const loginview({Key? key}) : super(key: key);
 
   @override
+  State<loginview> createState() => _loginviewState();
+}
 
+class _loginviewState extends State<loginview> {
+  var email = TextEditingController();
+  var password = TextEditingController();
+  late bool _passwordVisible;
+
+  @override
+  void initState() {
+    _passwordVisible = false;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController _textControllerIdChannel = TextEditingController(text: "1");
-    TextEditingController _textControllerEmail = TextEditingController(text: "");
-    TextEditingController _textControllerPassword = TextEditingController(text: "");
-    TextEditingController _textControllerIdPlatform = TextEditingController(text: "1");
-    TextEditingController _textControllerIdRole = TextEditingController(text: "1");
-    TextEditingController _textControllerIdDevice = TextEditingController(text: "1");
-    var loginController = ObjectController(ListObjectApi());
-    
     return Scaffold(
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -103,8 +109,7 @@ class loginView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
-                            controller: _textControllerEmail,
-                            obscureText: true,
+                            controller: email,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -138,8 +143,8 @@ class loginView extends StatelessWidget {
                           ),
                           const Padding(padding: EdgeInsets.only(top: 8)),
                           TextField(
-                            controller: _textControllerPassword,
-                            obscureText: true,
+                            obscureText: !_passwordVisible,
+                            controller: password,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -149,8 +154,18 @@ class loginView extends StatelessWidget {
                                 fontSize: 15,
                                 color: Color.fromARGB(255, 143, 143, 143),
                               ),
-                              suffixIcon: const Icon(
-                                Icons.remove_red_eye,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.remove_red_eye,
+                                  color: _passwordVisible
+                                      ? Colors.blue
+                                      : Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
                               ),
                             ),
                           )
@@ -171,7 +186,7 @@ class loginView extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const recuperarPasswordCorreoView()));
+                                          const recoverypasswordemail()));
                             },
                             child: const Text('¿Has olvidado tu contraseña?',
                                 style: TextStyle(
@@ -194,16 +209,50 @@ class loginView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(80.0),
                             ),
                           ),
-                          onPressed: () {
-                            Login login = Login(
-                              int.parse(_textControllerIdChannel.text),
-                              _textControllerEmail.text,
-                              _textControllerPassword.text,
-                              int.parse(_textControllerIdPlatform.text),
-                              int.parse(_textControllerIdRole.text),
-                              _textControllerIdDevice.text
-                            );
-                            loginController.listmethods(login);
+                          onPressed: () async {
+                            var response = await servicios.signIn(
+                                email.text, password.text);
+                            print(response);
+                            if (response["code"] == true) {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: Text(response["message"],
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  content: const Text(
+                                      'CORRECTO: El usuario ha iniciado sesión correctamente'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OnBoarding())),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title:
+                                      const Text('Error al realizar el login'),
+                                  content: const Text(
+                                      'Verifica tus datos de ingreso.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           },
                           child: const Text('Ingresar',
                               style: TextStyle(
@@ -227,7 +276,7 @@ class loginView extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const registerView()));
+                                          const registerview()));
                             },
                             child: const Text('Regístrate',
                                 style: TextStyle(

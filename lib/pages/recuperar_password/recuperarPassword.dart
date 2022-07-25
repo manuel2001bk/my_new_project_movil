@@ -42,7 +42,7 @@ class recuperarPasswordView extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const recuperarPasswordCorreoView()));
+                                          const recoverypasswordemail()));
                             },
                             child: const Icon(
                               Icons.arrow_back,

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:my_new_project/models/recover_pass.dart';
-import 'package:my_new_project/pages/login/loginView.dart';
-import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
 import 'package:my_new_project/pages/recuperar_password/recuperarPassword.dart';
-import 'package:my_new_project/repository/repository_api.dart';
-import 'package:my_new_project/repository/repository_controller.dart';
-class recuperarPasswordCorreoView extends StatelessWidget {
-  const recuperarPasswordCorreoView({Key? key}) : super(key: key);
+import '../login/loginView.dart';
+
+import '../../services/servicios.dart' as servicios;
+
+class recoverypasswordemail extends StatefulWidget {
+  const recoverypasswordemail({Key? key}) : super(key: key);
+
+  @override
+  State<recoverypasswordemail> createState() => _recoverypasswordemailState();
+}
+
+class _recoverypasswordemailState extends State<recoverypasswordemail> {
+  var email = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    TextEditingController _textControllerIdChannel = TextEditingController(text: "1");
-    TextEditingController _textControllerEmail = TextEditingController(text: "");
-    var recoverController = ObjectController(ListObjectApi());
     return Scaffold(body: LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return SingleChildScrollView(
@@ -40,7 +43,7 @@ class recuperarPasswordCorreoView extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const loginView()));
+                                            const loginview()));
                               },
                               child: const Icon(
                                 Icons.arrow_back,
@@ -94,8 +97,7 @@ class recuperarPasswordCorreoView extends StatelessWidget {
                         ),
                         const Padding(padding: EdgeInsets.only(top: 8)),
                         TextField(
-                          controller: _textControllerEmail,
-                          obscureText: true,
+                          controller: email,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -130,19 +132,79 @@ class recuperarPasswordCorreoView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(80.0),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            if (email.text.isNotEmpty) {
+                              var response =
+                                  await servicios.recoverPassword(email.text);
+                              print(response);
 
-                            RecoverPassword recoverPassword = RecoverPassword(
-                              int.parse(_textControllerIdChannel.text),
-                              _textControllerEmail.text
-                            );
-                            recoverController.methodRecover(recoverPassword);
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const recuperarPasswordView()));
+                              if (response["code"] == true) {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Registro correcto",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    content: const Text(
+                                        "Se ha enviado un enlace de recuperacion a su correo"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const recuperarPasswordView())),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Error",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    content: const Text(
+                                        "Verifique que su correo sea el correcto"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const loginview())),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            } else {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text("Error",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  content: const Text(
+                                      "Debe completar los campos para continuar"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           },
                           child: const Text('Enviar solicitud',
                               style: TextStyle(
