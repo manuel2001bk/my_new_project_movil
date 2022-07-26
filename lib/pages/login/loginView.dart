@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_new_project/pages/menu_inicio/menuInicioView.dart';
 import 'package:my_new_project/pages/on_boarding.dart';
+import 'package:my_new_project/pages/recuperar_password/recuperarPassword.dart';
 import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
 import 'package:my_new_project/pages/register/registerView.dart';
 
+import '../../models/user.dart';
 import '../../services/servicios.dart' as servicios;
 
 class loginview extends StatefulWidget {
@@ -214,6 +216,11 @@ class _loginviewState extends State<loginview> {
                                 email.text, password.text);
                             print(response);
                             if (response["code"] == true) {
+                              final usuario = User.instance;
+                              usuario.idUser = response["basicUser"]["idUser"];
+                              usuario.token = response["token"];
+                              print(usuario.idUser);
+
                               showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
@@ -229,7 +236,7 @@ class _loginviewState extends State<loginview> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  OnBoarding())),
+                                                  const recuperarPassword())),
                                       child: const Text('OK'),
                                     ),
                                   ],

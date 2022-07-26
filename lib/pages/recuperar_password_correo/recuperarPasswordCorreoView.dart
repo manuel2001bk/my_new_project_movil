@@ -155,7 +155,7 @@ class _recoverypasswordemailState extends State<recoverypasswordemail> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const recuperarPasswordView())),
+                                                    const recuperarPassword())),
                                         child: const Text('OK'),
                                       ),
                                     ],
@@ -174,11 +174,8 @@ class _recoverypasswordemailState extends State<recoverypasswordemail> {
                                         "Verifique que su correo sea el correcto"),
                                     actions: [
                                       TextButton(
-                                        onPressed: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const loginview())),
+                                        onPressed: () =>
+                                            Navigator.pop(context, 'OK'),
                                         child: const Text('OK'),
                                       ),
                                     ],

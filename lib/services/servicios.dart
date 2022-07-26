@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:my_new_project/models/user.dart';
 
 Future singUp(name, email, password) async {
   Uri url =
@@ -66,6 +67,32 @@ Future recoverPassword(email) async {
   String jsonObject = json.encode(data);
   var response = await http.post(url,
       headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonObject);
+  if (response.body.isNotEmpty) {
+    var responseBody = json.decode(response.body);
+    return responseBody;
+  }
+  return null;
+}
+
+Future updatePassword(password) async {
+  final usuario = User.instance;
+  Uri url = Uri.parse(
+      "http://desarrollovan-tis.dedyn.io:4010/api/User/UpdatePassword");
+
+  Map data = {
+    "idUser": usuario.idUser,
+    "newPassword": password,
+  };
+  print(data);
+  print(usuario.token);
+
+  String jsonObject = json.encode(data);
+  var response = await http.post(url,
+      headers: <String, String>{
+        "Authorization": "Bearer " + usuario.token,
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonObject);

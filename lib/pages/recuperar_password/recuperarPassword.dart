@@ -1,11 +1,32 @@
 // ignore: file_names
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:my_new_project/models/update_password.dart';
+import 'package:http/http.dart';
+
+import '../../services/servicios.dart' as servicios;
+
 import 'package:my_new_project/pages/recuperar_password_correo/recuperarPasswordCorreoView.dart';
 
-// ignore: camel_case_types
-class recuperarPasswordView extends StatelessWidget {
-  const recuperarPasswordView({Key? key}) : super(key: key);
+class recuperarPassword extends StatefulWidget {
+  const recuperarPassword({Key? key}) : super(key: key);
+
+  @override
+  State<recuperarPassword> createState() => _recuperarPasswordState();
+}
+
+class _recuperarPasswordState extends State<recuperarPassword> {
+  var password1 = TextEditingController();
+  var password2 = TextEditingController();
+  late bool _passwordVisible1;
+  late bool _passwordVisible2;
+
+  @override
+  void initState() {
+    _passwordVisible1 = false;
+    _passwordVisible2 = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +112,8 @@ class recuperarPasswordView extends StatelessWidget {
                       ),
                       const Padding(padding: EdgeInsets.only(top: 8)),
                       TextField(
-                        obscureText: true,
+                        controller: password1,
+                        obscureText: _passwordVisible1,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -100,6 +122,18 @@ class recuperarPasswordView extends StatelessWidget {
                           labelStyle: const TextStyle(
                             fontSize: 15,
                             color: Color.fromARGB(255, 143, 143, 143),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              Icons.remove_red_eye,
+                              color:
+                                  _passwordVisible1 ? Colors.blue : Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible1 = !_passwordVisible1;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -122,7 +156,8 @@ class recuperarPasswordView extends StatelessWidget {
                       ),
                       const Padding(padding: EdgeInsets.only(top: 8)),
                       TextField(
-                        obscureText: true,
+                        controller: password2,
+                        obscureText: _passwordVisible2,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -131,6 +166,18 @@ class recuperarPasswordView extends StatelessWidget {
                           labelStyle: const TextStyle(
                             fontSize: 15,
                             color: Color.fromARGB(255, 143, 143, 143),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              Icons.remove_red_eye,
+                              color:
+                                  _passwordVisible2 ? Colors.blue : Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible2 = !_passwordVisible2;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -150,7 +197,76 @@ class recuperarPasswordView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(80.0),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (password1.text.isNotEmpty &&
+                              password2.text.isNotEmpty) {
+                            if (password1.text == password2.text) {
+                              var response = await servicios
+                                  .updatePassword(password1.text);
+                              print(response);
+                              if (response["code"] == true) {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Correcto",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    content: const Text(
+                                        "Cambio de contraseña correcto"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text("Error",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    content: const Text(
+                                        "Error al cambiar la contraseña"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            }
+                          } else {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text("Error",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                content: const Text(
+                                    "Error al cambiar la contraseña"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'OK'),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
                         child: const Text('Actualizar Contraseña',
                             style: TextStyle(
                                 fontSize: 18,
